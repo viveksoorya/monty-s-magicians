@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #openBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #closedBtn {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="openBtn" class="btn">Open Bookings</button>
+        <button id="closedBtn" class="btn">Closed Bookings</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openBtn');
+        const closedBtn = document.getElementById('closedBtn');
+        const status = document.getElementById('status');
+
+        function setActiveButton(button) {
+            openBtn.classList.remove('active');
+            closedBtn.classList.remove('active');
+            button.classList.add('active');
+        }
+
+        openBtn.addEventListener('click', () => {
+            setActiveButton(openBtn);
+            status.textContent = 'Bookings are now open!';
+            status.style.color = '#4CAF50';
+        });
+
+        closedBtn.addEventListener('click', () => {
+            setActiveButton(closedBtn);
+            status.textContent = 'Bookings are now closed!';
+            status.style.color = '#f44336';
+        });
+    </script>
+</body>
+</html>
