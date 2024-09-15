@@ -21,40 +21,48 @@ class Space(BaseModel):
     time_slot: Optional[str]
     booking_status: Optional[str]
 
+# Database connection
 def get_db_connection():
     conn = sqlite3.connect('database_monty.db')
     conn.row_factory = sqlite3.Row
     return conn
 
+# Serve root HTML
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     with open("webpage2.html", "r") as file:
         content = file.read()
     return HTMLResponse(content=content)
 
-@app.get("/open-bookings", response_class=HTMLResponse)
-async def open_bookings():
-    with open("open_bookings.html", "r") as file:
+# Serve closed bookings HTML
+@app.get("/closed-bookings", response_class=HTMLResponse)
+async def closed_bookings():
+    with open("closed_bookings.html", "r") as file:
         content = file.read()
     return HTMLResponse(content=content)
 
-@app.get("/api/open-spaces", response_model=List[Space])
-async def get_open_spaces():
+# API endpoint for closed spaces
+@app.get("/api/closed-spaces", response_model=List[Space])
+async def get_closed_spaces():
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Query to retrieve closed bookings (spaces that have been booked)
     cursor.execute("""
         SELECT * FROM spaces 
-        WHERE booking_status IS NULL OR booking_status != 'booked'
+        WHERE booking_status = 'booked'
         ORDER BY booking_date, time_slot
     """)
+    
     spaces = cursor.fetchall()
     conn.close()
     
     if not spaces:
-        raise HTTPException(status_code=404, detail="No open spaces found")
+        raise HTTPException(status_code=404, detail="No closed bookings found")
     
     return [Space(**dict(space)) for space in spaces]
 
+# Main function for running the app
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
