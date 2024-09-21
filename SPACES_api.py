@@ -10,11 +10,14 @@ app = FastAPI()
 # Allow CORS (similar to Flask-CORS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this according to your frontend domain
+    allow_origins=["http://localhost", "http://127.0.0.1"],  # Adjust this according to your frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+### BELOW IS THE COMMENTED GLOBAL STATEMENTS ###
 
 #DATABASE = 'database_monty.db'
 # Connect to SQLite database (or create it if it doesn't exist)
@@ -92,7 +95,7 @@ async def book_space(data: BookingData):
         "classroom": data.classrooms,
         "purpose": data.purpose
     }
-
+    conn.close()
     return response_data
 
 
@@ -132,6 +135,7 @@ async def available_classrooms(time_slot: str):
     # Create a cursor object to execute SQL commands
     cursor = conn.cursor()
     available = get_available_classrooms(time_slot)
+    conn.close()
     return {"available_classrooms": available}
 
 
