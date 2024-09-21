@@ -16,16 +16,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DATABASE = 'database_monty.db'
+#DATABASE = 'database_monty.db'
 # Connect to SQLite database (or create it if it doesn't exist)
-conn = sqlite3.connect('database_monty.db')
+#conn = sqlite3.connect('database_monty.db')
 
 # Create a cursor object to execute SQL commands
-cursor = conn.cursor()
+#cursor = conn.cursor()
 
 
 # Example function to execute an SQLite statement
 def execute_sql(statement, values=None):
+    DATABASE = 'database_monty.db'
+    # Connect to SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('database_monty.db')
+
+    # Create a cursor object to execute SQL commands
+    cursor = conn.cursor()
     try:
         if values:
             cursor.execute(statement, values)
@@ -49,11 +55,12 @@ def execute_sql(statement, values=None):
 #    booking_status TEXT
 # );
 # '''
-conn.commit()
-cursor.execute("SELECT * FROM database_monty")
-rows = cursor.fetchall()
-for row in rows:
-    print(row)
+
+# conn.commit()
+# cursor.execute("SELECT * FROM database_monty")
+# rows = cursor.fetchall()
+# for row in rows:
+#     print(row)
 
 
 # Define request body model using Pydantic
@@ -66,6 +73,12 @@ class BookingData(BaseModel):
 # API route to handle booking data
 @app.post("/book")
 async def book_space(data: BookingData):
+    DATABASE = 'database_monty.db'
+    # Connect to SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('database_monty.db')
+
+    # Create a cursor object to execute SQL commands
+    cursor = conn.cursor()
     # Log the data to the console
     print("Booking Details Received:")
     print(f"Time Slot: {data.time_slot}")
@@ -87,6 +100,12 @@ async def book_space(data: BookingData):
 
 
 def get_available_classrooms(time_slot):
+    DATABASE = 'database_monty.db'
+    # Connect to SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('database_monty.db')
+
+    # Create a cursor object to execute SQL commands
+    cursor = conn.cursor()
     #conn = sqlite3.connect(DATABASE)
     #cursor = conn.cursor()
 
@@ -106,6 +125,12 @@ def get_available_classrooms(time_slot):
 # API route to get available classrooms for the selected time slot
 @app.get("/available_classrooms/{time_slot}")
 async def available_classrooms(time_slot: str):
+    DATABASE = 'database_monty.db'
+    # Connect to SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('database_monty.db')
+
+    # Create a cursor object to execute SQL commands
+    cursor = conn.cursor()
     available = get_available_classrooms(time_slot)
     return {"available_classrooms": available}
 
