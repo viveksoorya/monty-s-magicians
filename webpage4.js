@@ -90,16 +90,18 @@ timeSlotOptions.forEach(option => {
 });
 
 // Function to fetch available classrooms from the API
+// Function to fetch available classrooms from the API
 function fetchAvailableClassrooms(timeSlot) {
     fetch(`http://127.0.0.1:8000/available_classrooms/${timeSlot}`)
-        console.log('fetchAvailableClassrooms fetched.')
-        .then(response => response.json())
+        .then(response => response.json())  // Fetch returns a promise, chain .then() here
         .then(data => {
+            console.log('fetchAvailableClassrooms fetched.');  // Log after fetching
             const availableClassrooms = data.available_classrooms;
             updateClassroomButtons(availableClassrooms);  // Update the buttons
         })
         .catch(error => console.error('Error:', error));
 }
+
 
 // Function to update classroom buttons based on availability
 function updateClassroomButtons(availableClassrooms) {
