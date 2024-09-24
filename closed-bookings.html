@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closed Bookings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Closed Bookings</h1>
+    <div id="spacesTable"></div>
+
+    <script>
+        function fetchSpaces() {
+            fetch('/api/closed-spaces')  <!-- Updated API endpoint for closed bookings -->
+                .then(response => response.json())
+                .then(data => {
+                    const tableHtml = `
+                        <table>
+                            <tr>
+                                <th>Space Name</th>
+                                <th>Description</th>
+                                <th>Capacity</th>
+                                <th>Event Description</th>
+                                <th>Booking Date</th>
+                                <th>Time Slot</th>
+                            </tr>
+                            ${data.map(space => `
+                                <tr>
+                                    <td>${space.space_name}</td>
+                                    <td>${space.space_description || 'N/A'}</td>
+                                    <td>${space.capacity}</td>
+                                    <td>${space.event_description || 'N/A'}</td>
+                                    <td>${space.booking_date || 'N/A'}</td>
+                                    <td>${space.time_slot || 'N/A'}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    `;
+                    document.getElementById('spacesTable').innerHTML = tableHtml;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('spacesTable').innerHTML = '<p>Error loading spaces. Please try again later.</p>';
+                });
+        }
+
+        fetchSpaces();
+    </script>
+</body>
+</html>
