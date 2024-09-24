@@ -41,10 +41,11 @@ async def closed_bookings():
         content = file.read()
     return HTMLResponse(content=content)
 
+
 # API endpoint for closed spaces
 @app.get("/api/closed-spaces", response_model=List[Space])
 async def get_closed_spaces():
-    conn = get_db_connection()
+    conn = get_db_connection(database_monty)
     cursor = conn.cursor()
     
     # Query to retrieve closed bookings (spaces that have been booked)
